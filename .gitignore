@@ -1,0 +1,13 @@
+
+# Godot-specific ignores
+.import/
+
+# Mono-specific ignores
+.mono/
+
+# custom ignores
+.export/
+android/
+data/
+desktop.ini
+.idea/

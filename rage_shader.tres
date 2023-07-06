@@ -1,0 +1,46 @@
+[gd_resource type="Shader" format=2]
+
+[resource]
+code = "shader_type canvas_item;
+
+const float PI = 3.14159265;
+
+uniform vec2 canvas_size = vec2(1280., 720.);
+uniform float scale:hint_range(1.0, 32.0) = 2.0;
+uniform float strength:hint_range(0.0, 3.0) = 1.0;
+uniform float offset:hint_range(-5.0, 5.0) = 0.0;
+uniform float y_strength:hint_range(0.0, 3.0) = 1.0;
+uniform float p_time:hint_range(0.0, 1.0) = 0.0;
+uniform sampler2D txr;
+
+uniform vec3 col0 = vec3(0.0, 0.0, 0.0);
+uniform float thres0 = 0.3;
+uniform vec3 col1 = vec3(0.6, 0.3, 0.0);
+uniform float thres1 = 0.65;
+uniform vec3 col2 = vec3(1.0, 0.7, 0.2);
+uniform float thres2 = 0.9;
+uniform vec3 col3 = vec3(1.0, 1.0, 0.6);
+uniform float thres3 = 1.0;
+uniform vec3 col4 = vec3(1.0, 1.0, 1.0);
+
+vec3 colorize(float x) {
+	return mix(
+		mix(
+			mix(
+				col0, col1, smoothstep(0.0, thres0, x)
+			), mix(
+				col2, col3, smoothstep(thres1, thres2, x)
+			), smoothstep(thres0, thres1, x)
+		), col4,
+		smoothstep(thres2, thres3, x)
+	);
+}
+
+void fragment() {
+	vec2 uv = scale * (UV) * canvas_size / 1024. + vec2(0., p_time);
+	
+	float v = texture(txr, uv).r;
+	
+	COLOR.rgb = colorize(v + y_strength * (UV.y - offset));
+	//COLOR.rgb = uv.xyx;
+}"

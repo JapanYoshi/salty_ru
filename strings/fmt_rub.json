@@ -1,0 +1,14 @@
+{
+  "name": "rubles"
+, "description": "Russia’s currency that tanked after 2022."
+, "multiplier": 1
+, "decimalDigits": 0
+, "decimalSymbol": ","
+, "forceDecimalSymbol": false
+, "separatorDigits": [3]
+, "separatorSymbol": "."
+, "nega":   ["-", "₽"]
+, "zero":   ["±", "₽"]
+, "posi":   ["+", "₽"]
+, "noSign": [ "", "₽"]
+}

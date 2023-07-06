@@ -1,0 +1,8 @@
+[gd_resource type="Theme" load_steps=3 format=2]
+
+[ext_resource path="res://fonts/sorta_big_regular.tres" type="DynamicFont" id=1]
+[ext_resource path="res://fonts/sorta_big_italic.tres" type="DynamicFont" id=2]
+
+[resource]
+RichTextLabel/fonts/italics_font = ExtResource( 2 )
+RichTextLabel/fonts/normal_font = ExtResource( 1 )
