@@ -23,7 +23,7 @@ margin_top = 16.0
 margin_right = 122.0
 margin_bottom = 48.0
 custom_fonts/font = ExtResource( 2 )
-text = "Back"
+text = "Назад"
 align = 2
 __meta__ = {
 "_edit_use_anchors_": false

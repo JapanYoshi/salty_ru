@@ -7,7 +7,7 @@ const desc = [
 	"What the heck is [i]Salty Trivia,[/i] anyway? Read the virtual manual to find out.",
 	"Tweak settings, such as volume, phones-as-controllers capabilities, and cutscenes. (Press F11 to toggle fullscreen, by the way.)",
 	"View your past progress, such as high scores and when you got them.",
-	"Close the game. Bye!",
+	"Close the game. До свидания!",
 ]
 const desc_webpage = "Take a look at our webpage, haitouch.ga."
 onready var tween = Tween.new()

@@ -48,7 +48,6 @@ texture = ExtResource( 2 )
 expand = true
 
 [node name="Logo" parent="ScreenStretch" instance=ExtResource( 3 )]
-visible = true
 position = Vector2( 1014, 137 )
 scale = Vector2( 0.25, 0.25 )
 
@@ -80,7 +79,7 @@ margin_right = 456.0
 margin_bottom = 68.0
 rect_pivot_offset = Vector2( -1168, 328 )
 theme = ExtResource( 10 )
-text = "Play"
+text = "Играть"
 
 [node name="Button2" type="Button" parent="ScreenStretch/VBoxContainer"]
 margin_top = 72.0
@@ -96,7 +95,7 @@ margin_right = 456.0
 margin_bottom = 212.0
 rect_pivot_offset = Vector2( -1168, 328 )
 theme = ExtResource( 10 )
-text = "Settings"
+text = "Настройки"
 
 [node name="Button4" type="Button" parent="ScreenStretch/VBoxContainer"]
 margin_top = 216.0
@@ -104,7 +103,7 @@ margin_right = 456.0
 margin_bottom = 284.0
 rect_pivot_offset = Vector2( -1168, 328 )
 theme = ExtResource( 10 )
-text = "Save Data"
+text = "Сохранения"
 
 [node name="Button5" type="Button" parent="ScreenStretch/VBoxContainer"]
 margin_top = 288.0
@@ -112,7 +111,7 @@ margin_right = 456.0
 margin_bottom = 356.0
 rect_pivot_offset = Vector2( -1168, 328 )
 theme = ExtResource( 10 )
-text = "Exit"
+text = "Покинуть"
 
 [node name="Panel" type="Panel" parent="ScreenStretch"]
 anchor_left = 1.0

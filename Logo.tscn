@@ -108,7 +108,7 @@ tracks/2/keys = {
 "times": PoolRealArray( 0, 0.9, 0.966667 ),
 "transitions": PoolRealArray( 1, 0.3, 1 ),
 "update": 0,
-"values": [ -2.98023e-05, 0.0, -10.0 ]
+"values": [ 15.0, 15.0, 0.0 ]
 }
 tracks/3/type = "value"
 tracks/3/path = NodePath("WITH_CANDY_BARRE:modulate:a")
@@ -208,7 +208,7 @@ tracks/1/keys = {
 "times": PoolRealArray( 0 ),
 "transitions": PoolRealArray( 1 ),
 "update": 0,
-"values": [ -10.0 ]
+"values": [ 0.0 ]
 }
 tracks/2/type = "value"
 tracks/2/path = NodePath("T:position")
@@ -296,7 +296,6 @@ tracks/8/keys = {
 }
 
 [node name="Logo" type="Node2D"]
-visible = false
 position = Vector2( 306, 180 )
 scale = Vector2( 0.333, 0.333 )
 script = ExtResource( 1 )
@@ -310,16 +309,18 @@ anims/static = SubResource( 3 )
 [node name="Salty" type="Sprite" parent="."]
 position = Vector2( -270, -208 )
 texture = ExtResource( 3 )
+offset = Vector2( 0, 232 )
 
 [node name="rivia" type="Sprite" parent="."]
 position = Vector2( 189, 87 )
 texture = ExtResource( 5 )
+offset = Vector2( 10, 86 )
 
 [node name="T" type="Sprite" parent="."]
 position = Vector2( -572, 174 )
-rotation = -0.174533
 texture = ExtResource( 6 )
+offset = Vector2( 11.59, 39.098 )
 
 [node name="WITH_CANDY_BARRE" type="Sprite" parent="."]
-position = Vector2( 61, 358 )
+position = Vector2( 552, 314 )
 texture = ExtResource( 2 )

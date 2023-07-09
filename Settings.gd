@@ -3,7 +3,7 @@ extends Control
 var settings_dict = [
 	{
 		k = "graphics_quality",
-		t = "Graphics quality",
+		t = "Графика",
 		r = [0, 2],
 		o = [
 			{
@@ -139,7 +139,7 @@ var settings_dict = [
 		]
 	},{
 		k = "overall_volume",
-		t = "Volume",
+		t = "Громкость",
 		r = [0, 15],
 		o = [
 			{
@@ -172,7 +172,7 @@ var settings_dict = [
 			}
 		]},{
 		k = "music_volume",
-		t = "Music volume",
+		t = "Громкость музыки",
 		r = [0, 15],
 		o = [
 			{
@@ -206,7 +206,7 @@ var settings_dict = [
 		]
 	},{
 		k = "cutscenes",
-		t = "Cutscenes/Tutorials",
+		t = "Cutscenes/Обучение",
 		r = [0, 1],
 		o = [
 			{

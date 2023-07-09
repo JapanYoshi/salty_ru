@@ -146,8 +146,8 @@ margin_bottom = 28.0
 size_flags_horizontal = 3
 custom_colors/default_color = Color( 1, 1, 1, 0.627451 )
 bbcode_enabled = true
-bbcode_text = "Locked: false"
-text = "Locked: false"
+bbcode_text = "Закрыто: false"
+text = "Закрыто: false"
 fit_content_height = true
 
 [node name="HiScore" type="RichTextLabel" parent="Details/V/Stats/V0"]
@@ -157,8 +157,8 @@ margin_bottom = 88.0
 size_flags_horizontal = 3
 custom_colors/default_color = Color( 1, 1, 1, 0.627451 )
 bbcode_enabled = true
-bbcode_text = "High score: $-100,000 (2022-12-31)"
-text = "High score: $-100,000 (2022-12-31)"
+bbcode_text = "Рекорд: $-100,000 (2022-12-31)"
+text = "Рекорд: $-100,000 (2022-12-31)"
 fit_content_height = true
 
 [node name="V1" type="VBoxContainer" parent="Details/V/Stats"]
