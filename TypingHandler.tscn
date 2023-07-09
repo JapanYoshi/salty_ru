@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://themeTyping.tres" type="Theme" id=1]
 [ext_resource path="res://TypingHandler.gd" type="Script" id=2]
@@ -16,6 +16,12 @@ bg_color = Color( 0, 0, 0, 1 )
 corner_radius_top_left = 16
 corner_radius_top_right = 16
 corner_radius_bottom_right = 16
+
+[sub_resource type="StyleBoxFlat" id=4]
+bg_color = Color( 0, 0, 0, 1 )
+corner_radius_top_left = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
 
 [sub_resource type="Animation" id=1]
 resource_name = "Hide"
@@ -204,7 +210,6 @@ align = 1
 valign = 1
 
 [node name="KB" type="Panel" parent="."]
-visible = false
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -226,409 +231,444 @@ margin_right = -14.0
 margin_bottom = -16.0
 grow_horizontal = 2
 grow_vertical = 2
-columns = 10
-__meta__ = {
-"_edit_use_anchors_": false
-}
+columns = 11
 
 [node name="Key" type="Button" parent="KB/Grid"]
-margin_right = 80.0
+margin_right = 72.0
 margin_bottom = 72.0
-rect_min_size = Vector2( 80, 72 )
+rect_min_size = Vector2( 72, 72 )
 text = "A"
 
 [node name="Key2" type="Button" parent="KB/Grid"]
-margin_left = 84.0
-margin_right = 164.0
+margin_left = 76.0
+margin_right = 148.0
 margin_bottom = 72.0
-rect_min_size = Vector2( 80, 72 )
+rect_min_size = Vector2( 72, 72 )
 text = "A"
 
 [node name="Key3" type="Button" parent="KB/Grid"]
-margin_left = 168.0
-margin_right = 248.0
+margin_left = 152.0
+margin_right = 224.0
 margin_bottom = 72.0
-rect_min_size = Vector2( 80, 72 )
+rect_min_size = Vector2( 72, 72 )
 text = "A"
 
 [node name="Key4" type="Button" parent="KB/Grid"]
-margin_left = 252.0
-margin_right = 332.0
+margin_left = 228.0
+margin_right = 300.0
 margin_bottom = 72.0
-rect_min_size = Vector2( 80, 72 )
+rect_min_size = Vector2( 72, 72 )
 text = "A"
 
 [node name="Key5" type="Button" parent="KB/Grid"]
-margin_left = 336.0
-margin_right = 416.0
+margin_left = 304.0
+margin_right = 376.0
 margin_bottom = 72.0
-rect_min_size = Vector2( 80, 72 )
+rect_min_size = Vector2( 72, 72 )
 text = "A"
 
 [node name="Key6" type="Button" parent="KB/Grid"]
-margin_left = 420.0
-margin_right = 500.0
+margin_left = 380.0
+margin_right = 452.0
 margin_bottom = 72.0
-rect_min_size = Vector2( 80, 72 )
+rect_min_size = Vector2( 72, 72 )
 text = "A"
 
 [node name="Key7" type="Button" parent="KB/Grid"]
-margin_left = 504.0
-margin_right = 584.0
+margin_left = 456.0
+margin_right = 528.0
 margin_bottom = 72.0
-rect_min_size = Vector2( 80, 72 )
+rect_min_size = Vector2( 72, 72 )
 text = "A"
 
 [node name="Key8" type="Button" parent="KB/Grid"]
-margin_left = 588.0
-margin_right = 668.0
+margin_left = 532.0
+margin_right = 604.0
 margin_bottom = 72.0
-rect_min_size = Vector2( 80, 72 )
+rect_min_size = Vector2( 72, 72 )
 text = "A"
 
 [node name="Key9" type="Button" parent="KB/Grid"]
-margin_left = 672.0
-margin_right = 752.0
+margin_left = 608.0
+margin_right = 680.0
 margin_bottom = 72.0
-rect_min_size = Vector2( 80, 72 )
+rect_min_size = Vector2( 72, 72 )
 text = "A"
 
 [node name="Key10" type="Button" parent="KB/Grid"]
-margin_left = 756.0
-margin_right = 836.0
+margin_left = 684.0
+margin_right = 756.0
 margin_bottom = 72.0
-rect_min_size = Vector2( 80, 72 )
+rect_min_size = Vector2( 72, 72 )
 text = "A"
 
 [node name="Key11" type="Button" parent="KB/Grid"]
-margin_top = 76.0
-margin_right = 80.0
-margin_bottom = 148.0
-rect_min_size = Vector2( 80, 72 )
+margin_left = 760.0
+margin_right = 832.0
+margin_bottom = 72.0
+rect_min_size = Vector2( 72, 72 )
 text = "A"
 
 [node name="Key12" type="Button" parent="KB/Grid"]
-margin_left = 84.0
 margin_top = 76.0
-margin_right = 164.0
+margin_right = 72.0
 margin_bottom = 148.0
-rect_min_size = Vector2( 80, 72 )
+rect_min_size = Vector2( 72, 72 )
 text = "A"
 
 [node name="Key13" type="Button" parent="KB/Grid"]
-margin_left = 168.0
+margin_left = 76.0
 margin_top = 76.0
-margin_right = 248.0
+margin_right = 148.0
 margin_bottom = 148.0
-rect_min_size = Vector2( 80, 72 )
+rect_min_size = Vector2( 72, 72 )
 text = "A"
 
 [node name="Key14" type="Button" parent="KB/Grid"]
-margin_left = 252.0
+margin_left = 152.0
 margin_top = 76.0
-margin_right = 332.0
+margin_right = 224.0
 margin_bottom = 148.0
-rect_min_size = Vector2( 80, 72 )
+rect_min_size = Vector2( 72, 72 )
 text = "A"
 
 [node name="Key15" type="Button" parent="KB/Grid"]
-margin_left = 336.0
+margin_left = 228.0
 margin_top = 76.0
-margin_right = 416.0
+margin_right = 300.0
 margin_bottom = 148.0
-rect_min_size = Vector2( 80, 72 )
+rect_min_size = Vector2( 72, 72 )
 text = "A"
 
 [node name="Key16" type="Button" parent="KB/Grid"]
-margin_left = 420.0
+margin_left = 304.0
 margin_top = 76.0
-margin_right = 500.0
+margin_right = 376.0
 margin_bottom = 148.0
-rect_min_size = Vector2( 80, 72 )
+rect_min_size = Vector2( 72, 72 )
 text = "A"
 
 [node name="Key17" type="Button" parent="KB/Grid"]
-margin_left = 504.0
+margin_left = 380.0
 margin_top = 76.0
-margin_right = 584.0
+margin_right = 452.0
 margin_bottom = 148.0
-rect_min_size = Vector2( 80, 72 )
+rect_min_size = Vector2( 72, 72 )
 text = "A"
 
 [node name="Key18" type="Button" parent="KB/Grid"]
-margin_left = 588.0
+margin_left = 456.0
 margin_top = 76.0
-margin_right = 668.0
+margin_right = 528.0
 margin_bottom = 148.0
-rect_min_size = Vector2( 80, 72 )
+rect_min_size = Vector2( 72, 72 )
 text = "A"
 
 [node name="Key19" type="Button" parent="KB/Grid"]
-margin_left = 672.0
+margin_left = 532.0
 margin_top = 76.0
-margin_right = 752.0
+margin_right = 604.0
 margin_bottom = 148.0
-rect_min_size = Vector2( 80, 72 )
+rect_min_size = Vector2( 72, 72 )
 text = "A"
 
 [node name="Key20" type="Button" parent="KB/Grid"]
-margin_left = 756.0
+margin_left = 608.0
 margin_top = 76.0
-margin_right = 836.0
+margin_right = 680.0
 margin_bottom = 148.0
-rect_min_size = Vector2( 80, 72 )
+rect_min_size = Vector2( 72, 72 )
 text = "A"
 
 [node name="Key21" type="Button" parent="KB/Grid"]
-margin_top = 152.0
-margin_right = 80.0
-margin_bottom = 224.0
-rect_min_size = Vector2( 80, 72 )
+margin_left = 684.0
+margin_top = 76.0
+margin_right = 756.0
+margin_bottom = 148.0
+rect_min_size = Vector2( 72, 72 )
 text = "A"
 
 [node name="Key22" type="Button" parent="KB/Grid"]
-margin_left = 84.0
-margin_top = 152.0
-margin_right = 164.0
-margin_bottom = 224.0
-rect_min_size = Vector2( 80, 72 )
+margin_left = 760.0
+margin_top = 76.0
+margin_right = 832.0
+margin_bottom = 148.0
+rect_min_size = Vector2( 72, 72 )
 text = "A"
 
 [node name="Key23" type="Button" parent="KB/Grid"]
-margin_left = 168.0
 margin_top = 152.0
-margin_right = 248.0
+margin_right = 72.0
 margin_bottom = 224.0
-rect_min_size = Vector2( 80, 72 )
+rect_min_size = Vector2( 72, 72 )
 text = "A"
 
 [node name="Key24" type="Button" parent="KB/Grid"]
-margin_left = 252.0
+margin_left = 76.0
 margin_top = 152.0
-margin_right = 332.0
+margin_right = 148.0
 margin_bottom = 224.0
-rect_min_size = Vector2( 80, 72 )
+rect_min_size = Vector2( 72, 72 )
 text = "A"
 
 [node name="Key25" type="Button" parent="KB/Grid"]
-margin_left = 336.0
+margin_left = 152.0
 margin_top = 152.0
-margin_right = 416.0
+margin_right = 224.0
 margin_bottom = 224.0
-rect_min_size = Vector2( 80, 72 )
+rect_min_size = Vector2( 72, 72 )
 text = "A"
 
 [node name="Key26" type="Button" parent="KB/Grid"]
-margin_left = 420.0
+margin_left = 228.0
 margin_top = 152.0
-margin_right = 500.0
+margin_right = 300.0
 margin_bottom = 224.0
-rect_min_size = Vector2( 80, 72 )
+rect_min_size = Vector2( 72, 72 )
 text = "A"
 
 [node name="Key27" type="Button" parent="KB/Grid"]
-margin_left = 504.0
+margin_left = 304.0
 margin_top = 152.0
-margin_right = 584.0
+margin_right = 376.0
 margin_bottom = 224.0
-rect_min_size = Vector2( 80, 72 )
+rect_min_size = Vector2( 72, 72 )
 text = "A"
 
 [node name="Key28" type="Button" parent="KB/Grid"]
-margin_left = 588.0
+margin_left = 380.0
 margin_top = 152.0
-margin_right = 668.0
+margin_right = 452.0
 margin_bottom = 224.0
-rect_min_size = Vector2( 80, 72 )
+rect_min_size = Vector2( 72, 72 )
 text = "A"
 
 [node name="Key29" type="Button" parent="KB/Grid"]
-margin_left = 672.0
+margin_left = 456.0
 margin_top = 152.0
-margin_right = 752.0
+margin_right = 528.0
 margin_bottom = 224.0
-rect_min_size = Vector2( 80, 72 )
+rect_min_size = Vector2( 72, 72 )
 text = "A"
 
 [node name="Key30" type="Button" parent="KB/Grid"]
-margin_left = 756.0
+margin_left = 532.0
 margin_top = 152.0
-margin_right = 836.0
+margin_right = 604.0
 margin_bottom = 224.0
-rect_min_size = Vector2( 80, 72 )
+rect_min_size = Vector2( 72, 72 )
 text = "A"
 
 [node name="Key31" type="Button" parent="KB/Grid"]
-margin_top = 228.0
-margin_right = 80.0
-margin_bottom = 300.0
-rect_min_size = Vector2( 80, 72 )
+margin_left = 608.0
+margin_top = 152.0
+margin_right = 680.0
+margin_bottom = 224.0
+rect_min_size = Vector2( 72, 72 )
 text = "A"
 
 [node name="Key32" type="Button" parent="KB/Grid"]
-margin_left = 84.0
-margin_top = 228.0
-margin_right = 164.0
-margin_bottom = 300.0
-rect_min_size = Vector2( 80, 72 )
+margin_left = 684.0
+margin_top = 152.0
+margin_right = 756.0
+margin_bottom = 224.0
+rect_min_size = Vector2( 72, 72 )
 text = "A"
 
 [node name="Key33" type="Button" parent="KB/Grid"]
-margin_left = 168.0
-margin_top = 228.0
-margin_right = 248.0
-margin_bottom = 300.0
-rect_min_size = Vector2( 80, 72 )
+margin_left = 760.0
+margin_top = 152.0
+margin_right = 832.0
+margin_bottom = 224.0
+rect_min_size = Vector2( 72, 72 )
 text = "A"
 
 [node name="Key34" type="Button" parent="KB/Grid"]
-margin_left = 252.0
 margin_top = 228.0
-margin_right = 332.0
+margin_right = 72.0
 margin_bottom = 300.0
-rect_min_size = Vector2( 80, 72 )
+rect_min_size = Vector2( 72, 72 )
 text = "A"
 
 [node name="Key35" type="Button" parent="KB/Grid"]
-margin_left = 336.0
+margin_left = 76.0
 margin_top = 228.0
-margin_right = 416.0
+margin_right = 148.0
 margin_bottom = 300.0
-rect_min_size = Vector2( 80, 72 )
+rect_min_size = Vector2( 72, 72 )
 text = "A"
 
 [node name="Key36" type="Button" parent="KB/Grid"]
-margin_left = 420.0
+margin_left = 152.0
 margin_top = 228.0
-margin_right = 500.0
+margin_right = 224.0
 margin_bottom = 300.0
-rect_min_size = Vector2( 80, 72 )
+rect_min_size = Vector2( 72, 72 )
 text = "A"
 
 [node name="Key37" type="Button" parent="KB/Grid"]
-margin_left = 504.0
+margin_left = 228.0
 margin_top = 228.0
-margin_right = 584.0
+margin_right = 300.0
 margin_bottom = 300.0
-rect_min_size = Vector2( 80, 72 )
+rect_min_size = Vector2( 72, 72 )
 text = "A"
 
 [node name="Key38" type="Button" parent="KB/Grid"]
-margin_left = 588.0
+margin_left = 304.0
 margin_top = 228.0
-margin_right = 668.0
+margin_right = 376.0
 margin_bottom = 300.0
-rect_min_size = Vector2( 80, 72 )
+rect_min_size = Vector2( 72, 72 )
 text = "A"
 
 [node name="Key39" type="Button" parent="KB/Grid"]
-margin_left = 672.0
+margin_left = 380.0
 margin_top = 228.0
-margin_right = 752.0
+margin_right = 452.0
 margin_bottom = 300.0
-rect_min_size = Vector2( 80, 72 )
+rect_min_size = Vector2( 72, 72 )
 text = "A"
 
 [node name="Key40" type="Button" parent="KB/Grid"]
-margin_left = 756.0
+margin_left = 456.0
 margin_top = 228.0
-margin_right = 836.0
+margin_right = 528.0
 margin_bottom = 300.0
-rect_min_size = Vector2( 80, 72 )
+rect_min_size = Vector2( 72, 72 )
 text = "A"
 
 [node name="Key41" type="Button" parent="KB/Grid"]
-margin_top = 304.0
-margin_right = 80.0
-margin_bottom = 376.0
-rect_min_size = Vector2( 80, 72 )
+margin_left = 532.0
+margin_top = 228.0
+margin_right = 604.0
+margin_bottom = 300.0
+rect_min_size = Vector2( 72, 72 )
 text = "A"
 
 [node name="Key42" type="Button" parent="KB/Grid"]
-margin_left = 84.0
-margin_top = 304.0
-margin_right = 164.0
-margin_bottom = 376.0
-rect_min_size = Vector2( 80, 72 )
+margin_left = 608.0
+margin_top = 228.0
+margin_right = 680.0
+margin_bottom = 300.0
+rect_min_size = Vector2( 72, 72 )
 text = "A"
 
 [node name="Key43" type="Button" parent="KB/Grid"]
-margin_left = 168.0
-margin_top = 304.0
-margin_right = 248.0
-margin_bottom = 376.0
-rect_min_size = Vector2( 80, 72 )
+margin_left = 684.0
+margin_top = 228.0
+margin_right = 756.0
+margin_bottom = 300.0
+rect_min_size = Vector2( 72, 72 )
 text = "A"
 
 [node name="Key44" type="Button" parent="KB/Grid"]
-margin_left = 252.0
-margin_top = 304.0
-margin_right = 332.0
-margin_bottom = 376.0
-rect_min_size = Vector2( 80, 72 )
+margin_left = 760.0
+margin_top = 228.0
+margin_right = 832.0
+margin_bottom = 300.0
+rect_min_size = Vector2( 72, 72 )
 text = "A"
 
 [node name="Key45" type="Button" parent="KB/Grid"]
-margin_left = 336.0
 margin_top = 304.0
-margin_right = 416.0
+margin_right = 72.0
 margin_bottom = 376.0
-rect_min_size = Vector2( 80, 72 )
+rect_min_size = Vector2( 72, 72 )
 text = "A"
 
 [node name="Key46" type="Button" parent="KB/Grid"]
-margin_left = 420.0
+margin_left = 76.0
 margin_top = 304.0
-margin_right = 500.0
+margin_right = 148.0
 margin_bottom = 376.0
-rect_min_size = Vector2( 80, 72 )
+rect_min_size = Vector2( 72, 72 )
+text = "A"
+
+[node name="Key47" type="Button" parent="KB/Grid"]
+margin_left = 152.0
+margin_top = 304.0
+margin_right = 224.0
+margin_bottom = 376.0
+rect_min_size = Vector2( 72, 72 )
+text = "A"
+
+[node name="Key48" type="Button" parent="KB/Grid"]
+margin_left = 228.0
+margin_top = 304.0
+margin_right = 300.0
+margin_bottom = 376.0
+rect_min_size = Vector2( 72, 72 )
+text = "A"
+
+[node name="Key49" type="Button" parent="KB/Grid"]
+margin_left = 304.0
+margin_top = 304.0
+margin_right = 376.0
+margin_bottom = 376.0
+rect_min_size = Vector2( 72, 72 )
+text = "A"
+
+[node name="Key50" type="Button" parent="KB/Grid"]
+margin_left = 380.0
+margin_top = 304.0
+margin_right = 452.0
+margin_bottom = 376.0
+rect_min_size = Vector2( 72, 72 )
+text = "A"
+
+[node name="Key51" type="Button" parent="KB/Grid"]
+margin_left = 456.0
+margin_top = 304.0
+margin_right = 528.0
+margin_bottom = 376.0
+rect_min_size = Vector2( 72, 72 )
+text = "A"
+
+[node name="Key52" type="Button" parent="KB/Grid"]
+margin_left = 532.0
+margin_top = 304.0
+margin_right = 604.0
+margin_bottom = 376.0
+rect_min_size = Vector2( 72, 72 )
 text = "A"
 
 [node name="KeySpace" type="Button" parent="KB"]
-margin_left = 518.0
+margin_left = 621.0
 margin_top = 316.0
-margin_right = 682.0
+margin_right = 771.0
 margin_bottom = 396.0
 rect_min_size = Vector2( 80, 80 )
 text = "SPACE"
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="KeySubmit" type="Button" parent="KB"]
-margin_left = 686.0
+margin_left = 773.0
 margin_top = 316.0
-margin_right = 850.0
+margin_right = 925.0
 margin_bottom = 396.0
 rect_min_size = Vector2( 80, 80 )
 text = "SUBMIT"
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Label" type="Label" parent="KB"]
 margin_left = 826.0
-margin_top = 81.0
+margin_top = 1.0
 margin_right = 864.0
-margin_bottom = 125.0
+margin_bottom = 45.0
 custom_colors/font_color = Color( 1, 1, 1, 1 )
 custom_fonts/font = ExtResource( 7 )
 custom_styles/normal = SubResource( 3 )
 text = "㍚"
 align = 1
 valign = 1
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="Label2" type="Label" parent="KB"]
-margin_left = 825.0
-margin_top = 316.0
-margin_right = 864.0
-margin_bottom = 360.0
+margin_left = 766.0
+margin_top = 374.0
+margin_right = 805.0
+margin_bottom = 418.0
 custom_colors/font_color = Color( 1, 1, 1, 1 )
 custom_fonts/font = ExtResource( 7 )
-custom_styles/normal = SubResource( 3 )
+custom_styles/normal = SubResource( 4 )
 text = "㍙"
 align = 1
 valign = 1
@@ -637,13 +677,13 @@ __meta__ = {
 }
 
 [node name="Label3" type="Label" parent="KB"]
-margin_left = 656.0
-margin_top = 316.0
-margin_right = 695.0
-margin_bottom = 360.0
+margin_left = 607.0
+margin_top = 372.0
+margin_right = 646.0
+margin_bottom = 416.0
 custom_colors/font_color = Color( 1, 1, 1, 1 )
 custom_fonts/font = ExtResource( 7 )
-custom_styles/normal = SubResource( 3 )
+custom_styles/normal = SubResource( 4 )
 text = "㍘"
 align = 1
 valign = 1
