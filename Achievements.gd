@@ -22,10 +22,11 @@ var toastie_queue = []
 
 const TOASTIE_DISTANCE: float = 64.0
 onready var toastie_tween: Tween = $Tween
+var waiting_for_resize: bool = true
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	get_tree().connect("screen_resized", self, "_on_screen_resized")
+	get_viewport().connect("screen_resized", self, "_on_screen_resized")
 	_initialize_achievements()
 	for i in len(toasties):
 		toasties[i].position.y = -TOASTIE_DISTANCE
@@ -52,13 +53,23 @@ func _process(delta):
 	if cooldown <= 0.0:
 		_show_toastie(toastie_queue.pop_front())
 		return
+	if waiting_for_resize:
+		_resize_element()
+		waiting_for_resize = false
+
 
 func _on_screen_resized():
+	waiting_for_resize = true
+
+
+func _resize_element():
 	var resolution = get_viewport_rect().size
+	rect_pivot_offset = Vector2(640, 360)
 	rect_scale = Vector2.ONE * min(
 		resolution.y / 720.0,
 		resolution.x / 1080.0
 	)
+	print("Achievements resize", resolution, ":", rect_scale)
 
 
 func _initialize_achievements():

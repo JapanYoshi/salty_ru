@@ -295,9 +295,9 @@ func _http_request_completed(result, response_code, _headers, _body, q, node_to_
 			"The HTTP response code was %d.\n") % [q, response_code]
 		)
 	if !error_message.empty():
-		error_message += "Please check that your Internet connection is strong and stable, and try again."
+		error_message += "Please check that your Internet connection is strong and stable, and that your network is not blocking " + Loader.question_url + ", and try again."
 		if OS.has_feature("Android"):
-			error_message += " As you are playing on Android, please make sure that you have not revoked the appṥ’s permission to access the Internet."
+			error_message += " As you are playing on Android, please make sure that you have given the app permission to access the Internet."
 		R.crash(error_message)
 		return
 	Loader.append_question_cache(q)
@@ -326,10 +326,12 @@ func _load_question(q):
 #			R.crash("Loaded resource pack for question ID %s, but it seems to be incomplete.\n" % q + "Cause of failure: res://q/%s/_question.gdcfg does not exist." % q)
 #			return
 #		print("_load_question(%s): " % q, "Loading question text preemptively...")
-		var result = Loader.load_question_text(q)
-		if result:
-			R.crash(("Loading question text for %s" % q) + " failed with error code %d." % result)
-			return
+		Loader.load_question_text(q)
+		yield(get_tree(), "idle_frame")
+#		var result: int = Loader.load_question_text(q)
+#		if result:
+#			R.crash(("Loading question text for %s" % q) + (" failed with error code %d." % result))
+#			return
 #		# check last file
 #		q = R.pass_between.episode_data.question_id[0]
 #		if !file.file_exists("res://q/%s/title.wav.import" % q):

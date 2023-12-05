@@ -16,12 +16,12 @@ var random_questions = {}
 # ProjectSettings.globalize_path forbids this from being a const
 var q_cache_path = ProjectSettings.globalize_path("user://")
 const question_url = "https://haitouch.ga/me/salty/q/"
-const q_cache_filename = "%s.zip"
+const q_cache_filename = "%s.pck"
 var cached = {}
 
 # update this when releasing new version
 # must start with "_assets"
-var asset_cache_filename = "_assets_3.pck"
+var asset_cache_filename = "_assets_episode_pack_2.pck"
 var asset_cache_path = ProjectSettings.globalize_path("user://")
 const asset_cache_url = "https://haitouch-9320f.web.app/salty_pck/"
 onready var http_request = HTTPRequest.new()
@@ -61,6 +61,7 @@ func _ready():
 		file.open(q_cache_path + "_cached_questions.csv", File.WRITE)
 		file.store_string("")
 	file.close()
+	print("asset cache path is " + ProjectSettings.globalize_path(asset_cache_path))
 	# var dir: Directory = Directory.new()
 	# if !(dir.dir_exists(q_cache_path)):
 	# 	dir.make_dir_recursive(q_cache_path)
@@ -113,7 +114,7 @@ func remove_from_question_cache(id, save_text_file: bool = true):
 	var file: File = File.new()
 	file.open(q_cache_path + "_cached_questions.csv", File.WRITE)
 	var not_first: bool = false
-	for id in cached:
+	for id in cached.keys().sort():
 		if cached[id]:
 			if not_first:
 				file.store_string(",")
@@ -166,25 +167,32 @@ func mount_cached_question(id):
 var assets_done: bool = false
 func head_request_assets(callback_node: Node, callback_function_name: String):
 	print("Loader.download_assets(): Getting ready to contact this url: ", asset_cache_url + asset_cache_filename)
+	# Because HEAD request stopped working, set the body size limit to a comically small value instead
+	http_request.set_body_size_limit(16)
 	http_request.connect("request_completed", self, "_head_request_completed", [callback_node, callback_function_name], CONNECT_ONESHOT)
-	var result = http_request.request(
+	var result = http_request.request_raw(
 		asset_cache_url + asset_cache_filename,
-		["Accept-Encoding: identity"], true, HTTPClient.METHOD_HEAD
+		["Accept-Encoding: identity"]
 	)
 	if result:
 		printerr("http_request() HEAD did not succeed: ", result)
 		if is_instance_valid(callback_node):
 			callback_node.call(callback_function_name, 8)
 		return
+	else:
+		print("http_request() HEAD succeeded")
 
 
 func _head_request_completed(\
 	result: int, response_code: int, headers: PoolStringArray, body: PoolByteArray,\
 	callback_node: Node, callback_function_name: String):
-	print("_head_request_completed ", result, " ", response_code, " ", headers, " ", body)
+	print("_head_request_completed: result=", result, " response_code=", response_code, " headers=", headers, " body=", body)
+#	if result == HTTPRequest.RESULT_CONNECTION_ERROR:
+#		callback_node.call(callback_function_name, 10, 0)
+#		return
 	# get last modified date
 	var file: File = File.new()
-	var last_mod_saved: String = ""
+	var last_mod_saved: String = "not downloaded"
 	if file.file_exists(asset_cache_path + "last-modified.txt"):
 		file.open(asset_cache_path + "last-modified.txt", File.READ)
 		last_mod_saved = file.get_as_text()
@@ -198,17 +206,27 @@ func _head_request_completed(\
 			size = int(h_split[1])
 		elif h_split[0] == "last-modified":
 			last_mod = h_split[1]
-	if is_instance_valid(callback_node):
 		if last_mod == last_mod_saved:
-			print("New last-modified header value ", last_mod, " == cached last-modified header value", last_mod_saved)
-			callback_node.call(callback_function_name, 9, size)
+			print("New last-modified header value <", last_mod, ">== cached last-modified header value <", last_mod_saved, ">")
+			var load_result = load_assets()
+			if load_result:
+				if is_instance_valid(callback_node):
+					callback_node.call(callback_function_name, 9, size)
+					return
+			else:
+				print("Could not load asset file, requesting redownload")
+				if is_instance_valid(callback_node):
+					callback_node.call(callback_function_name, 0, size)
 		else:
-			print("New last-modified header value ", last_mod, " != cached last-modified header value", last_mod_saved)
-			callback_node.call(callback_function_name, 0, size)
+			print("New last-modified header value <", last_mod, "> != cached last-modified header value <", last_mod_saved, ">")
+			if is_instance_valid(callback_node):
+				callback_node.call(callback_function_name, 0, size)
 
 
 func download_assets_confirm(callback_node: Node, callback_function_name: String):
 	http_request.set_download_file(asset_cache_path + asset_cache_filename)
+	# Unset the body size limit
+	http_request.set_body_size_limit(-1)
 	http_request.download_chunk_size = 262144
 	http_request.connect("request_completed", self, "_download_assets_request_completed", [], CONNECT_ONESHOT)
 	# Perform the HTTP request.
@@ -271,7 +289,7 @@ func _download_assets_request_completed(\
 	# save last modified date
 	var last_mod: String = ""
 	for h in headers:
-		var h_split = h.split(":", 1)
+		var h_split = h.split(":", true, 1)
 		if h_split[0] == "last-modified":
 			last_mod = h_split[1]
 			break
@@ -285,9 +303,12 @@ func _download_assets_request_completed(\
 func load_assets():
 	var result = ProjectSettings.load_resource_pack(asset_cache_path + asset_cache_filename)
 	print("Resource pack load result is ", result)
-	yield(get_tree().create_timer(0.5), "timeout")
-	emit_signal("loaded")
-	return
+	if result:
+		yield(get_tree().create_timer(0.5), "timeout")
+		emit_signal("loaded")
+	else:
+		clear_asset_cache()
+	return result
 
 
 func clear_asset_cache():
@@ -298,29 +319,72 @@ func clear_asset_cache():
 		while file_name != "":
 			if !dir.current_is_dir():
 				print("Found file: " + asset_cache_path + file_name)
-				if file_name.begins_with("_assets") and file_name.ends_with(".pck"):
+				if (
+					file_name.begins_with("_assets") and file_name.ends_with(".pck")
+				) or (
+					file_name == "last-modified.txt"
+				):
 					dir.remove(file_name)
 			file_name = dir.get_next()
 
+## Old version that didn't allow "//" inside text
+# func remove_jsonc_comments(text: String) -> String:
+# 	# remove block comments
+# 	# as a side effect of me not bothering to parse the entire thing, strings cannot contain /* or */
+# 	var start: int = text.find("/*"); var end: int = text.find("*/", start)
+# 	while start != -1:
+# 		if end == -1:
+# 			return "// Parse error in remove_jsonc_comments: Unterminated block comment."
+# 		text.erase(start, end - start + 2)
+# 		start = text.find("/*"); end = text.find("*/", start)
+# 	# remove line comments
+# 	start = text.find("//"); end = text.find("\n", start)
+# 	while start != -1:
+# 		if end == -1:
+# 			# delete until EOF
+# 			text = text.left(start)
+# 		else:
+# 			text.erase(start, end - start + 1)
+# 		start = text.find("//"); end = text.find("\n", start)
+# 	return text
 
+## New version with a primitive check to see if we're inside a string
 func remove_jsonc_comments(text: String) -> String:
-	# remove block comments
-	# as a side effect of me not bothering to parse the entire thing, strings cannot contain /* or */
-	var start: int = text.find("/*"); var end: int = text.find("*/", start)
-	while start != -1:
-		if end == -1:
-			return "// Parse error in remove_jsonc_comments: Unterminated block comment."
-		text.erase(start, end - start + 2)
-		start = text.find("/*"); end = text.find("*/", start)
-	# remove line comments
-	start = text.find("//"); end = text.find("\n", start)
-	while start != -1:
-		if end == -1:
-			# delete until EOF
-			text = text.left(start)
-		else:
-			text.erase(start, end - start + 1)
-		start = text.find("//"); end = text.find("\n", start)
+	var inside_a_string: bool = false
+	var closing_tag: String
+	var i: int = -1
+	while i < len(text) - 1:
+		i += 1
+		# JSON only allows double quotes to start and end a string.
+		if text[i] == '"':
+			if inside_a_string:
+				if text[i - 1] == "\\":
+					# Literal quotation mark inside a string. Ignore.
+					continue
+				inside_a_string = !inside_a_string
+			continue
+		if text[i] == "/":
+			# Slashes are used in all comment tags.
+			if inside_a_string:
+				# Literal slash inside a string. Ignore.
+				continue
+			if text[i + 1] == "/":
+				# Single line comment.
+				closing_tag = "\n"
+			elif text[i + 1] == "*":
+				# Multiline comment.
+				closing_tag = "*/"
+			else:
+				# Not a comment, but a misplaced slash. Leave it for the JSON parser to find.
+				continue
+			# Find the end of the comment.
+			var end = text.find(closing_tag, i)
+			if end == -1:
+				# delete until EOF
+				text = text.left(i)
+				break
+			else:
+				text.erase(i, end - i + len(closing_tag))
 	return text
 
 
@@ -369,12 +433,29 @@ func load_episodes_list():
 		var names = file.get_as_text().split(",")
 		for ep_name in names:
 			ep_name = ep_name.strip_edges()
-			var ep_file = File.new()
-			ep_file.open(episode_path + ep_name + "/ep.json", File.READ)
-			var result = JSON.parse(ep_file.get_as_text())
-			if result.error == OK:
-				episodes[ep_name] = result.result
-				episodes[ep_name].filename = ep_name
+#			var ep_file = File.new()
+#			ep_file.open(episode_path + ep_name + "/ep.json", File.READ)
+#			var result = JSON.parse(
+#				remove_jsonc_comments(ep_file.get_as_text())
+#			)
+#			if result.error == OK:
+#				episodes[ep_name] = result.result
+#				episodes[ep_name].filename = ep_name
+#			else:
+#				print("Couldn't load episode: " + ep_name)
+			var ep_file = ConfigFile.new()
+			var load_err = ep_file.load(episode_path + ep_name + "/ep.gdcfg")
+			if load_err == OK:
+				episodes[ep_name] = {audio = {}}
+				for section in ep_file.get_sections():
+					if section == "ep":
+						for key in ep_file.get_section_keys("ep"):
+							episodes[ep_name][key] = ep_file.get_value("ep", key)
+					else:
+						if section.begins_with("audio_"):
+							episodes[ep_name].audio[section.trim_prefix("audio_")] = {}
+							for key in ep_file.get_section_keys(section):
+								episodes[ep_name].audio[section.trim_prefix("audio_")][key] = ep_file.get_value(section, key)
 			else:
 				print("Couldn't load episode: " + ep_name)
 	print("Loader: Episode data loaded.")
@@ -424,40 +505,37 @@ func reset_question_text():
 	question_texts.clear()
 
 
-func load_question_text(id) -> int:
-	var failed_count: int = 3
+func load_question_text(id):
 	var file = ConfigFile.new()
 	# I changed the name of the file during Alpha development.
-	var err = ERR_FILE_NOT_FOUND
+	var err: int = ERR_FILE_NOT_FOUND
 	var path = question_path + id + "/_question.gdcfg"
 	print("Trying to load the following file... " + path)
-	while failed_count:
-		err = file.load(path)
-		if !err:
-			break
-		failed_count -= 1
-		printerr("Load failed: ", err)
-		yield(get_tree().create_timer(0.2), "timeout")
+	err = file.load(path)
 	if err == ERR_FILE_NOT_FOUND:
 		R.crash("Question data `_question.gdcfg` for ID '" + id + "' is missing.")
-		return err
+		printerr("question id ", id, " has missing GDCFG")
+		yield(get_tree(), "idle_frame")
+		return #err
 	elif err == ERR_PARSE_ERROR:
-		print("Found it, but it could not be parsed")
 		var textfile = File.new()
 		textfile.open(path, File.READ)
-		print(textfile.get_as_text())
+		printerr("question id ", id, " has bad GDCFG:\n", textfile.get_as_text())
 		textfile.close()
 		R.crash("Question data for ID '" + id + "' cannot be parsed. Please look at the console for output.")
-		return err
+		yield(get_tree(), "idle_frame")
+		return #err
 	elif err != OK:
 		R.crash("Loading question data `_question.gdcfg` for ID '" + id + "' resulted in error code %d." % err)
-		return err
+		yield(get_tree(), "idle_frame")
+		return #err
 	if len(file.get_sections()) == 0:
 		var textfile = File.new()
 		textfile.open(path, File.READ)
-		R.crash("Question data for ID '" + id + "' turned out empty. Text content:\n" + textfile.get_as_text())
 		textfile.close()
-		return ERR_FILE_EOF
+		R.crash("Question data for ID '" + id + "' turned out empty. Text content:\n" + textfile.get_as_text())
+		yield(get_tree(), "idle_frame")
+		return #ERR_FILE_EOF
 	question_texts[id] = {}
 	for section in file.get_sections():
 		if section == "root":
@@ -467,9 +545,9 @@ func load_question_text(id) -> int:
 			question_texts[id][section] = {}
 			for section_key in file.get_section_keys(section):
 				question_texts[id][section][section_key] = file.get_value(section, section_key)
-	if question_texts.has(id):
-		return OK
-	return ERR_SCRIPT_FAILED
+#	if question_texts.has(id):
+#		return OK
+#	return ERR_SCRIPT_FAILED
 
 
 func load_question(id, first_question: bool, q_box: Node):
@@ -599,6 +677,27 @@ func load_question(id, first_question: bool, q_box: Node):
 				var result = yield(S, "voice_preloaded")
 				if result != OK:
 					failed.push_back(key)
+		# Sorta Kinda Lifesaver tutorial.
+		elif key == "sort_lifesaver":
+			var real_key = "sort_lifesaver" if R.get_lifesaver_count() > 0 else "sort_no_lifesaver"
+			# account for the possibility that it may be random
+			if data[real_key]["v"] == "random":
+				load_random_voice_line(key, real_key)
+				var result = yield(self, "voice_line_loaded")
+				if result != OK:
+					failed.push_back(key)
+			elif data[real_key]["v"].begins_with("_"):
+				load_random_voice_line(key, data[real_key]["v"].substr(1))
+				var result = yield(self, "voice_line_loaded")
+				if result != OK:
+					failed.push_back(key)
+			else:
+				S.call_deferred("preload_voice",
+					key, id + "/" + real_key, true, data[real_key].s
+				)
+				var result = yield(S, "voice_preloaded")
+				if result != OK:
+					failed.push_back(real_key)
 		elif data.has(key) and data[key]["v"] != "":
 			if data[key]["v"] != "random":
 				# not random

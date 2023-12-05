@@ -38,13 +38,6 @@ func _on_AnimationPlayer_animation_finished(anim_name):
 	if anim_name == "fadeout":
 		anim.play("haitouch")
 	elif anim_name == "haitouch":
-		# dummy animation; the real animation is in the viewport
-		anim.play("thebox")
-		$TheBoxContainer.show()
-		$TheBoxV/s/AnimationPlayer.play("thebox")
-	elif anim_name == "thebox":
-		$TheBoxV/s/AnimationPlayer.stop(false)
-		$TheBoxContainer.hide()
 		anim.play("godot")
 	elif anim_name == "godot":
 		get_tree().change_scene_to(title)

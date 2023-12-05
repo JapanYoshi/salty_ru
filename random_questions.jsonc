@@ -5,21 +5,21 @@ NOTE: Godot allows JSON files to have trailing commas, but not comments. I coded
 {
   "n": [ // Normal questions
     // Demo version
-    "n001",
-    "n002",
-    "n003",
-    "n004",
-    "n005",
-    "n006",
-    "n007",
-    "n008",
-    "n009",
-    "n010",
-    "n011",
-    "n012",
-    "n013",
-    "n014",
-    "n015",
+    // "n001",
+    // "n002",
+    // "n003",
+    // "n004",
+    // "n005",
+    // "n006",
+    // "n007",
+    // "n008",
+    // "n009",
+    // "n010",
+    // "n011",
+    // "n012",
+    // "n013",
+    // "n014",
+    // "n015",
     // Episode Pack 1
     "n040",
     "n041",
@@ -42,20 +42,34 @@ NOTE: Godot allows JSON files to have trailing commas, but not comments. I coded
     "n058",
     "n059",
     "n060",
+    // Episode Pack 2
+    "n061",
+    "n085",
+    "n086",
+    "n087",
+    "n088",
+    "n089",
+    "n090",
+    "n091",
   ],
   "s": [ // Sorta Kinda
     // Demo version
-    "s001",
-    "s002",
+    // "s001",
+    // "s002",
     // Episode Pack 1
     "s006",
     "s007",
     "s008",
     "s009",
+    // Episode Pack 2
+    "s013",
+    "s014",
+    "s015",
+    "s016",
   ],
   "c": [ // Candy Trivia
     // Demo Version
-    "c001",
+    // "c001",
     // Episode Pack 1
     "c005",
     "c006",
@@ -67,15 +81,28 @@ NOTE: Godot allows JSON files to have trailing commas, but not comments. I coded
     "c012",
     "c013",
     "c014",
+    // Episode Pack 2: none
+    
   ],
   "o": [ // Rage Against the Times
     // Episode Pack 1
     "o002",
     "o003",
+    // Episode Pack 2
+    "o005",
+    "o006",
+    "o007",
+  ],
+  "b": [ // Big Brain Storming
+    // Episode Pack 2
+    "b003",
+    "b004",
+    "b005",
+    "b006",
   ],
   "g": [ // All Outta Salt
     // Demo version
-    "g001",
+    // "g001",
     // Episode Pack 1
     "g005",
     "g006",
@@ -85,26 +112,35 @@ NOTE: Godot allows JSON files to have trailing commas, but not comments. I coded
     "g010",
     "g011",
     "g012",
+    // Episode Pack 2
+    "g017",
+    "g018",
+    "g019",
   ],
   "t": [ // Thousand-Question Question
     // Demo version
-    "t001",
+    // "t001",
     // Episode Pack 1
-    // we need some new ones
     "t004",
     "t005",
+    // Episode Pack 2
+    "t007",
   ],
   "l": [ // Like It or Leave It
     // Demo version
-    "l001",
+    // "l001",
     // Episode Pack 1
     "l002",
     "l003",
     "l004",
+    // Episode Pack 2
+    "l007",
+    "l008",
+    "l009",
   ],
   "r": [ // Sugar Rush
     // Demo version
-    "r001",
+    // "r001",
     // Episode Pack 1
     "r004",
     "r005",
@@ -112,5 +148,11 @@ NOTE: Godot allows JSON files to have trailing commas, but not comments. I coded
     "r007",
     "r008",
     "r009",
+    // Episode Pack 2
+    "r011",
+    "r012",
+    "r013",
+    "r014",
+    "r015",
   ],
 }

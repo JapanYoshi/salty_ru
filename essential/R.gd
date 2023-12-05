@@ -1,6 +1,6 @@
 extends Node
 
-const VERSION_CODE = "05-19-AMONG-ARRIVES"
+const VERSION_CODE = "12-05-DEBTS-MISSILE"
 
 ### "Root", for data that every page should have.
 signal change_audience_count(audience_count)
@@ -36,6 +36,7 @@ var DEFAULT_CFG = {
 	hide_room_code_ingame = false,
 	awesomeness = true,
 	currency_format = "fmt_usd.json",
+	no_ragequit = false,
 	cheat_codes_active = [],
 }
 
@@ -77,7 +78,10 @@ const DEFAULT_SAVE = {
 	achievements = {
 	},
 	misc = {
+		never_seen_disclaimer = true,
 		cuss_history = [],
+		cuss_counter = 0,
+		cuss_timestamp = 0,
 		guests_seen = [],
 		cheat_codes_unlocked = [],
 	},
@@ -87,6 +91,9 @@ var save_data = DEFAULT_SAVE.duplicate(true)
 var unlocks = {
 	ep_001 = ["ep_002"],
 	ep_002 = ["ep_003"],
+	ep_003 = ["ep_004"],
+	ep_004 = ["ep_005"],
+	ep_005 = ["ep_006"],
 }
 
 # Called when the node enters the scene tree for the first time.
@@ -218,28 +225,28 @@ func get_high_score(ep_id: String):
 
 func submit_high_score(score: int, accuracy: float):
 	if not (get_settings_value("cheat_codes_active").empty()): return
-	if not (pass_between.episode_data.filename in save_data.history.keys()):
-		init_high_score(pass_between.episode_data.filename)
+	if not (pass_between.episode_name in save_data.history.keys()):
+		init_high_score(pass_between.episode_name)
 	var edited_high_score: bool = false
 	var now = OS.get_unix_time()
-	save_data.history[pass_between.episode_data.filename].last_played = now
+	save_data.history[pass_between.episode_name].last_played = now
 	# check if high score is better
-	if save_data.history[pass_between.episode_data.filename].high_score_time == 0\
-	or score > save_data.history[pass_between.episode_data.filename].high_score:
+	if save_data.history[pass_between.episode_name].high_score_time == 0\
+	or score > save_data.history[pass_between.episode_name].high_score:
 		edited_high_score = true
-		save_data.history[pass_between.episode_data.filename].high_score = score
-		save_data.history[pass_between.episode_data.filename].high_score_time = now
+		save_data.history[pass_between.episode_name].high_score = score
+		save_data.history[pass_between.episode_name].high_score_time = now
 	# check if accuarcy is better
 	if !is_nan(accuracy) and (
-		save_data.history[pass_between.episode_data.filename].best_accuracy_time == 0\
-		or accuracy > save_data.history[pass_between.episode_data.filename].best_accuracy
+		save_data.history[pass_between.episode_name].best_accuracy_time == 0\
+		or accuracy > save_data.history[pass_between.episode_name].best_accuracy
 	):
 		edited_high_score = true
-		save_data.history[pass_between.episode_data.filename].best_accuracy = accuracy
-		save_data.history[pass_between.episode_data.filename].best_accuracy_time = now
+		save_data.history[pass_between.episode_name].best_accuracy = accuracy
+		save_data.history[pass_between.episode_name].best_accuracy_time = now
 	# check if new episode is unlocked
-	if pass_between.episode_data.filename in unlocks.keys():
-		for unlock in unlocks[pass_between.episode_data.filename]:
+	if pass_between.episode_name in unlocks.keys():
+		for unlock in unlocks[pass_between.episode_name]:
 			if save_data.history[unlock].locked:
 				edited_high_score = true
 				save_data.history[unlock].locked = false
@@ -370,17 +377,19 @@ func _set_visual_quality(quality: int = -1):
 
 func crash(reason):
 #	Ws.close_room()
+	Fb.close_room()
 	S.stop_voice()
 	S.play_music("", 0)
 	audience_keys = []
 	
 # warning-ignore:return_value_discarded
-	get_tree().change_scene('res://essential/FatalError.tscn')
 	call_deferred(
 		"_deferred_crash", reason
 	)
 
 func _deferred_crash(reason):
+	get_tree().change_scene('res://essential/FatalError.tscn')
+	yield(get_tree(), "idle_frame")
 # warning-ignore:unsafe_method_access
 	get_tree().get_root().get_node('Error').set_reason(reason)
 	S.play_sfx("naughty")
@@ -417,25 +426,24 @@ func uuid_reset():
 	slot_dict.clear()
 
 ### Audience join (here because people might join/leave mid-game)
-# [TODO] Not implemented for Firebase
 
-func listen_for_audience_join():
+func listen_for_new_remote_join():
 	pass
 	if get_settings_value("room_openness") != 0 and get_settings_value("audience"):
-#		Ws.connect("player_joined", self, 'audience_join')
+#		Ws.connect("player_joined", self, 'new_remote_join')
 # warning-ignore:return_value_discarded
-		Fb.connect("player_joined", self, 'audience_join')
+		Fb.connect("player_joined", self, 'new_remote_join')
 #		Ws.connect('player_requested_nick', self, "give_audience_nick")
 
-func stop_listening_for_audience_join():
-	pass
-#	Ws.disconnect("player_joined", self, 'audience_join')
-	Fb.disconnect("player_joined", self, 'audience_join')
+func stop_listening_for_new_remote_join():
+#	Ws.disconnect("player_joined", self, 'new_remote_join')
+	if Fb.is_connected("player_joined", self, "new_remote_join"):
+		Fb.disconnect("player_joined", self, 'new_remote_join')
 #	Ws.disconnect('player_requested_nick', self, "give_audience_nick")
 
-func audience_join(data):
+func new_remote_join(data):
 	# join as audience if permitted
-	if get_settings_value("audience"):
+	if not(data.name in Fb.players_list) and get_settings_value("audience"):
 		# accept
 		if not(data.name in audience_keys):
 			var device_number = C.add_controller(C.DEVICES.REMOTE, data.name)
@@ -466,7 +474,7 @@ func update_audience_count():
 ## ref: https://bulbapedia.bulbagarden.net/wiki/List_of_censored_words_in_Generation_V
 ## If a search for swear words led you here, I'm sorry.
 const bad_room_codes = ["ARSE","ARSH","BICH","BITC","BITE","BSTD","BTCH","CAZI","CAZO","CAZZ","CHNK","CLIT","COCC","COCK","COCU","COKC","COKK","CONO","COON","CUCK","CULE","CULO","CUUL","CUMM","CUMS","CUNT","CUUM","DAMN","DICC","DICK","DICS","DICX","DIKC","DIKK","DIKS","DIKX","DIXX","DKHD","DYKE","FAAG","FAGG","FAGS","FFAG","FICA","FICK","FIGA","FOTZ","FCUK","FUCC","FUCK","FUCT","FUCX","FUKC","FUKK","FUKT","FUKX","FUXX","GIMP","GYPS","HEIL","HOES","HOMO","HORE","HTLR","JODA","JODE","JAPS","JEWS","JIPS","JIZZ","KACK","KIKE","KUNT","MERD","MRCA","MRCN","MRDE","NAZI","NCUL","NEGR","NGGR","NGRR","NGRS","NIGG","NIGR","NUTE","NUTT","PAKI","PCHA","PEDE","PEDO","PHUC","PHUK","PINE","PISS","PLLA","PNIS","POOP","PORN","POYA","PUTA","PUTE","PUTN","PUTO","RAEP","RAPE","SECS","SECX","SEKS","SEKX","SEXX","SHAT","SHIT","SHIZ","SHYT","SIMP","SLAG","SPAS","SPAZ","SPRM","TARD","TITS","TROA","TROI","TWAT","VAGG","VIOL","WANK","WHOR"];
-const bad_room_substr = ["ASS","CUM","FAG","KKK"];
+const bad_room_substr = ["ASS","BCH","CUM","FAG","FCK","FUK","FUC","KKK","SHT"];
 func generate_room_code():
 	var buf: PoolByteArray = [0, 0, 0, 0]
 	var code: String = ""

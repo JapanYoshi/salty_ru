@@ -11,6 +11,7 @@ var last_duration: int = 0
 func _ready():
 #	clear_contents()
 	S.sub_node = self
+	tbox.bbcode_text = ""
 	### Testing
 	#queue_subtitles("Welcome to Salty Trivia with Candy Barre,[#3000#]and I woke up like this.[#5500#]Disheveled.")
 	### End testing
@@ -43,6 +44,7 @@ func _on_size_changed():
 		# too narrow
 		viewport_scale = resolution.x / base_resolution.x
 		self.rect_position = Vector2(0.0, 0.5 * (resolution.y - base_resolution.y * viewport_scale))
+	print("SubtitleHandler resized: ", resolution, " : ", viewport_scale)
 	#$ColorRect.rect_size = base_resolution * viewport_scale
 	vbox.size = Vector2(900, 96) * viewport_scale
 	sbox.rect_size = vbox.size
