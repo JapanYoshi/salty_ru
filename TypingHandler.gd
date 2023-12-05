@@ -85,10 +85,24 @@ var config = {
 	KB_HEIGHT = 5,
 	kb_main = [
 		'1', '2', '3', '4', '5', '6', '7', '8', '9', '0', 'delete',
-		'А', 'Б', 'В', 'Г', 'Д', 'Е', 'Ж', 'З', 'И', 'Й', 'К',
-		'Л', 'М', 'Н', 'О', 'П', 'Р', 'С', 'Т', 'У', 'Ф', 'Х',
-		'Ц', 'Ч', 'Ш', 'Щ', 'Ъ', 'Ы', 'Ь', 'Э', 'Ю', 'left', 'right',
-		'Я', 'Ё', '.', ',', '?', '!', '-', "'",
+		'Й', 'Ц', 'У', 'К', 'Е', 'Н', 'Г', 'Ш', 'Щ', 'З', 'Х',
+		'Ф', 'Ы', 'В', 'А', 'П', 'Р', 'О', 'Л', 'Д', 'Ж', 'Э',
+		'Я', 'Ч', 'С', 'М', 'И', 'Т', 'Ь', 'Б', 'Ю', 'left', 'right',
+		'Ё', '.', ',', '?', '!', '-', 'Ъ', 'latin',
+	],
+#	kb_main = [
+#		'1', '2', '3', '4', '5', '6', '7', '8', '9', '0', 'delete',
+#		'А', 'Б', 'В', 'Г', 'Д', 'Е', 'Ж', 'З', 'И', 'Й', 'К',
+#		'Л', 'М', 'Н', 'О', 'П', 'Р', 'С', 'Т', 'У', 'Ф', 'Х',
+#		'Ц', 'Ч', 'Ш', 'Щ', 'Ъ', 'Ы', 'Ь', 'Э', 'Ю', 'left', 'right',
+#		'Я', 'Ё', '.', ',', '?', '!', '-', 'latin',
+#	],
+	kb_latin = [
+		'1', '2', '3', '4', '5', '6', '7', '8', '9', '0', 'delete',
+		'Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P', '',
+		'A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', '/', '',
+		'Z', 'X', 'C', 'V', 'B', 'N', 'M', "'", '', 'left', 'right',
+		'', '.', ',', '?', '!', '-', '', 'cyrillic',
 	],
 	sp_main = [
 		'space', 'А', 'Б', 'В', 'Г', 'Д', 'Е', 'Ж',
@@ -110,7 +124,9 @@ const keycap_text = {
 	"right": "⇾",
 	"delete": "⌫",
 	"submit": "✓",
-	"num": "№"
+	"num": "№",
+	"latin": "ab",
+	"cyrillic": "аб",
 }
 
 func key_text(which: String):
@@ -165,7 +181,7 @@ func _key_pressed(which: String):
 		"space":
 			tbox.append_at_cursor(" ")
 			sfx_press()
-		"num":
+		"num", "latin", "cyrillic":
 			_toggle_num()
 			sfx_press()
 		"submit":
@@ -176,11 +192,15 @@ func _key_pressed(which: String):
 
 func _kb_focused():
 	if kb_focus_y == config.KB_HEIGHT - 1:
-		if kb_focus_x >= 8:
+		if kb_focus_x >= 10:
 			return "submit"
-		if kb_focus_x >= 6:
+		if kb_focus_x >= 8:
 			return "space"
-	return config.kb_main[kb_focus_y * config.KB_WIDTH + kb_focus_x]
+	var i: int = kb_focus_y * config.KB_WIDTH + kb_focus_x
+	if num:
+		return config.kb_latin[i]
+	return config.kb_main[i]
+
 
 func kb_set_page(new_page):
 	if new_page == kb_page:
@@ -231,12 +251,12 @@ func kb_move(margin: int):
 	else:
 		match margin:
 			MARGIN_RIGHT:
-				if kb_focus_y == 4 and kb_focus_x >= 6:
+				if kb_focus_y == 4 and kb_focus_x == 8:
 					kb_focus_x = (kb_focus_x + 2) % config.KB_WIDTH
 				else:
 					kb_focus_x = (kb_focus_x + 1) % config.KB_WIDTH
 			MARGIN_LEFT:
-				if kb_focus_y == 4 and (kb_focus_x >= 8 or kb_focus_x == 0):
+				if kb_focus_y == 4 and kb_focus_x == 10:
 					kb_focus_x = posmod(kb_focus_x - 2, config.KB_WIDTH)
 				else:
 					kb_focus_x = posmod(kb_focus_x - 1, config.KB_WIDTH)
@@ -251,9 +271,9 @@ func kb_move(margin: int):
 	#print("Keyboard focus: %d, %d" % [kb_focus_x, kb_focus_y])
 	
 	if kb_focus_y == 4:
-		if kb_focus_x >= 8:
+		if kb_focus_x >= 10:
 			$KB/KeySubmit.grab_focus()
-		elif kb_focus_x >= 6:
+		elif kb_focus_x >= 8:
 			$KB/KeySpace.grab_focus()
 		else:
 			$KB/Grid.get_child(kb_focus_y * config.KB_WIDTH + kb_focus_x).grab_focus()
@@ -492,6 +512,9 @@ func dw_set_page(new_page: int):
 
 func _toggle_num():
 	num = !num
+	if which_keyboard == 0:
+		_kb_relabel_keys(false)
+		return
 	if which_keyboard == 1:
 		var i = -1
 		for e in $DW.get_children():
@@ -525,6 +548,18 @@ func _toggle_num():
 						j += 1
 				i += 1
 
+
+func _kb_relabel_keys(also_connect: bool = false):
+	var i = 0
+	for e in $KB/Grid.get_children():
+		var key_text: String = key_text(config.kb_latin[i] if num else config.kb_main[i])
+		e.set_text(key_text)
+		e.self_modulate.a = 0.5 if key_text == "" else 1.0
+		if also_connect:
+			e.connect("pressed", self, "_key_pressed", [config.kb_main[i]])
+		i += 1
+
+
 func _ready():
 	hide()
 	reset_state()
@@ -533,15 +568,11 @@ func _ready():
 		"[^ 0-9A-Z.,'!?\\-/]+"
 	)
 	# touch keyboard
-	var i = 0
-	for e in $KB/Grid.get_children():
-		e.set_text(key_text(config.kb_main[i]))
-		e.connect("pressed", self, "_key_pressed", [config.kb_main[i]])
-		i += 1
+	_kb_relabel_keys(true)
 	$KB/KeySpace.connect("pressed", self, "_key_pressed", ["space"])
 	$KB/KeySubmit.connect("pressed", self, "_key_pressed", ["submit"])
 	# DaisyWheel
-	i = -1
+	var i = -1
 	for e in $DW.get_children():
 		if e.name == "KbBase":
 			e.get_node("L").get_child(0).set_text(
