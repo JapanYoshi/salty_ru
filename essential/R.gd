@@ -35,7 +35,7 @@ var DEFAULT_CFG = {
 	hide_room_code = false,
 	hide_room_code_ingame = false,
 	awesomeness = true,
-	currency_format = "fmt_usd.json",
+	currency_format = "fmt_rub.json",
 	no_ragequit = false,
 	cheat_codes_active = [],
 }
@@ -99,9 +99,11 @@ var unlocks = {
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	rng.randomize()
+	# This activates the FU easter egg
 	var result = cuss_regex.compile("F+U+C+K+[^A-Z]*(Y+O+U|O+F)")
 	if result != OK:
 		print("Could not compile cuss RegEx: error code %d" % result)
+	# This censors usernames and typed responses
 	result = censor_regex.compile("FU(CC|CK|KK|KC)|\\b(BULL|DOG|HORSE)?SHIT(E|S|TED|TER|TY)?\\b|\\bPISS(BABY|ED|ER|ING)?|NIGG(A|ER)|\bFAG(\b|GOT|S)|QUEER")
 	if result != OK:
 		print("Could not compile censor RegEx: error code %d" % result)
