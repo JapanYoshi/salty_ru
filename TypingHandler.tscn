@@ -636,7 +636,7 @@ margin_top = 316.0
 margin_right = 771.0
 margin_bottom = 396.0
 rect_min_size = Vector2( 80, 80 )
-text = "SPACE"
+text = "ПРОБЕЛ"
 
 [node name="KeySubmit" type="Button" parent="KB"]
 margin_left = 773.0

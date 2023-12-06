@@ -53,7 +53,7 @@ func server_connected():
 #	Ws.disconnect('disconnected', self, "server_failed")
 	$Instructions/SignupOnline.self_modulate = Color(1, 1, 1, 0.3)
 	# Ws.websocket_url
-	$Instructions/SignupOnline/host.set_text("Visit haitouch.ga/te")
+	$Instructions/SignupOnline/host.set_text("Посетите «haitouch.ga/lya»")
 	$Instructions/SignupOnline/RoomCode2.set_text("Opening room...")
 	$Instructions/SignupOnline/RoomCode.set_text("")
 #	Ws.connect("room_opened", self, "room_opened", [], CONNECT_ONESHOT)
@@ -65,7 +65,7 @@ func room_tried(success: bool):
 		room_code = Fb.room_code
 #		self.connect("tree_exited", Ws, "close_room")
 		$Instructions/SignupOnline.self_modulate = Color(1, 1, 1, 1.0)
-		$Instructions/SignupOnline/RoomCode2.set_text("and enter the room code:")
+		$Instructions/SignupOnline/RoomCode2.set_text("и введите код комнаты:")
 		room_code_hidden = !R.get_settings_value("hide_room_code")
 		toggle_show_room_code()
 		$Instructions/SignupOnline/ReadAloud.set_text("Shift/Select: read room code aloud")
@@ -80,10 +80,10 @@ func room_tried(success: bool):
 func toggle_show_room_code():
 	if room_code != "":
 		if room_code_hidden:
-			$Instructions/SignupOnline/ShowHide.set_text("Space/㍙: hide room code")
+			$Instructions/SignupOnline/ShowHide.set_text("Пробел/㍙: hide room code")
 			$Instructions/SignupOnline/RoomCode.set_text(room_code)
 		else:
-			$Instructions/SignupOnline/ShowHide.set_text("Space/㍙: show room code")
+			$Instructions/SignupOnline/ShowHide.set_text("Пробел/㍙: show room code")
 			$Instructions/SignupOnline/RoomCode.set_text("????")
 		room_code_hidden = !room_code_hidden
 
@@ -457,7 +457,7 @@ func signup_ended(name, keyboard_type):
 		if signup_now.type == C.DEVICES.GAMEPAD:
 			match signup_now.side:
 				0:
-					default_name = "Gamepad %d" % (signup_now.device_number + 1)
+					default_name = "Геймпад %d" % (signup_now.device_number + 1)
 					icon_name = "gp"
 				1:
 					default_name = "Shared L %d" % (signup_now.device_number + 1)
@@ -470,26 +470,26 @@ func signup_ended(name, keyboard_type):
 			keyboard_type = 0
 			match signup_now.input_slot_number:
 				0:
-					default_name = "Keeb WASD"
+					default_name = "Клав. ЦФЫВ"
 				1:
-					default_name = "Keeb GVBN"
+					default_name = "Клав. ПМИТ"
 				2:
-					default_name = "Keeb IJKL"
+					default_name = "Клав. ШОЛД"
 				3:
-					default_name = "Numpad"
+					default_name = "Нумпад"
 		elif signup_now.type == C.DEVICES.TOUCHSCREEN:
 			icon_name = "touch"
 			keyboard_type = 0
-			default_name = "Touchscreen"
+			default_name = "Курсор Рука"
 		elif signup_now.type == C.DEVICES.REMOTE:
 			icon_name = "online"
 			keyboard_type = 3
 			var device_number = C.add_controller(C.DEVICES.REMOTE, signup_now.remote_device_name)
 			signup_now.device_number = device_number
-			default_name = "Remote %d" % (len(R.players) + 1)
+			default_name = "Теле-Пульт %d" % (len(R.players) + 1)
 		else:
 			icon_name = "retro"
-			default_name = "Player %d" % (len(R.players) + 1)
+			default_name = "Игрок %d" % (len(R.players) + 1)
 		# has name been censored before this point?
 		if signup_now.censored == true:
 			name_type = 2
@@ -526,18 +526,18 @@ func signup_ended(name, keyboard_type):
 		print("Appending new player: ", player)
 		if len(R.players) == 0:
 			if R.get_settings_value("remote_start"):
-				$Ready/Label2.set_text("Or press Return on the keyboard")
+				$Ready/Label2.set_text("или нажмите «Return» на клавиатуре")
 			if signup_now.type == C.DEVICES.GAMEPAD:
-				$Ready/Label.set_text("Press ㍝ to start!")
+				$Ready/Label.set_text("Нажмите «㍝», чтобы начать!")
 			elif signup_now.type == C.DEVICES.KEYBOARD or (
 				signup_now.type == C.DEVICES.REMOTE and !R.get_settings_value("remote_start")
 			):
-				$Ready/Label.set_text("Press Return to start!")
+				$Ready/Label.set_text("Нажмите «Return», чтобы начать!")
 				$Ready/Label2.set_text("")
 			elif signup_now.type == C.DEVICES.TOUCHSCREEN:
-				$Ready/Label.set_text("Tap here to start!")
+				$Ready/Label.set_text("Нажмите здесь, чтобы начать!")
 			elif signup_now.type == C.DEVICES.REMOTE:
-				$Ready/Label.set_text("Tap “Start” to start!")
+				$Ready/Label.set_text("Нажмите «Начать», чтобы начать!")
 			$Ready/Anim.play("Enter")
 		R.players.append(player)
 		if len(R.players) >= 1 + R.get_settings_value("room_size"):
