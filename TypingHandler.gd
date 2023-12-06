@@ -119,14 +119,14 @@ var config = {
 }
 
 const keycap_text = {
-	"space": "␣",
-	"left": "⇽",
-	"right": "⇾",
-	"delete": "⌫",
-	"submit": "✓",
-	"num": "№",
-	"latin": "ab",
-	"cyrillic": "аб",
+	"space": "␣", # U+2423 OPEN BOX (common symbol for space)
+	"left": "⇽", # U+21FD LEFTWARDS OPEN-HEADED ARROW
+	"right": "⇾", # U+21FE RIGHTWARDS OPEN-HEADED ARROW
+	"delete": "⌫",  # U+232B ERASE TO THE LEFT (common symbol for backspace
+	"submit": "✓", # U+2713 CHECK MARK
+	"num": "№", # U+2116 NUMERO SIGN (appears as "123" in the font)
+	"latin": "Ⅼ", # U+216C ROMAN NUMERAL FIFTY (looks like "L", appears as boxed "ABCD" in the font)
+	"cyrillic": "Ⅽ", # U+216D ROMAN NUMERAL HUNDRED (looks like "C", appears as boxed "АБВГ" in the font)
 }
 
 func key_text(which: String):
